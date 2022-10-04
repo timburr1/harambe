@@ -1,0 +1,155 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://assets/graphics/bg/foreground_mountains.png" type="Texture" id=1]
+[ext_resource path="res://assets/graphics/bg/farground_mountains.png" type="Texture" id=2]
+[ext_resource path="res://assets/graphics/bg/midground_mountains.png" type="Texture" id=3]
+[ext_resource path="res://assets/graphics/bg/mid_ground_cloud_1.png" type="Texture" id=4]
+[ext_resource path="res://assets/graphics/bg/mid_ground_cloud_2.png" type="Texture" id=5]
+[ext_resource path="res://GameScene.gd" type="Script" id=6]
+[ext_resource path="res://assets/fonts/animeace.ttf" type="DynamicFontData" id=7]
+
+[sub_resource type="DynamicFont" id=1]
+size = 60
+outline_size = 1
+font_data = ExtResource( 7 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "Stage Display"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Label:percent_visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 4 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "startAnimationDone"
+} ]
+}
+
+[sub_resource type="DynamicFont" id=3]
+size = 48
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 7 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 30, 360 )
+
+[node name="GameSceneRoot" type="Node2D"]
+script = ExtResource( 6 )
+
+[node name="Mountains" type="Node" parent="."]
+
+[node name="FargroundMountains" type="Sprite" parent="Mountains"]
+position = Vector2( 0, 390 )
+z_index = -12
+texture = ExtResource( 2 )
+centered = false
+
+[node name="MidgroundMountains" type="Sprite" parent="Mountains"]
+position = Vector2( 0, 601 )
+z_index = -11
+texture = ExtResource( 3 )
+centered = false
+
+[node name="ForegroundMountains" type="Sprite" parent="Mountains"]
+position = Vector2( 0, 611 )
+z_index = -10
+texture = ExtResource( 1 )
+centered = false
+
+[node name="FargroundMountains2" type="Sprite" parent="Mountains"]
+position = Vector2( 2048, 390 )
+z_index = -12
+texture = ExtResource( 2 )
+centered = false
+
+[node name="MidgroundMountains2" type="Sprite" parent="Mountains"]
+position = Vector2( 2048, 601 )
+z_index = -11
+texture = ExtResource( 3 )
+centered = false
+
+[node name="ForegroundMountains2" type="Sprite" parent="Mountains"]
+position = Vector2( 2048, 611 )
+z_index = -10
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Clouds" type="Node" parent="."]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="Clouds"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="Clouds/ParallaxBackground"]
+motion_scale = Vector2( 0.5, 1 )
+motion_mirroring = Vector2( 2048, 0 )
+
+[node name="MidGroundCloud1" type="Sprite" parent="Clouds/ParallaxBackground/ParallaxLayer"]
+position = Vector2( 1022, 292 )
+texture = ExtResource( 4 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="Clouds/ParallaxBackground/ParallaxLayer"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="Clouds/ParallaxBackground/ParallaxLayer/ParallaxBackground"]
+motion_scale = Vector2( 0.75, 1 )
+motion_mirroring = Vector2( 2048, 0 )
+
+[node name="MidGroundCloud2" type="Sprite" parent="Clouds/ParallaxBackground/ParallaxLayer/ParallaxBackground/ParallaxLayer"]
+position = Vector2( 1024, 458 )
+texture = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 520.0
+margin_top = 360.0
+margin_right = 759.0
+margin_bottom = 427.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_outline_modulate = Color( 1, 1, 1, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "STAGE"
+align = 1
+valign = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+"anims/Stage Display" = SubResource( 2 )
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Kills" type="Label" parent="HUD"]
+margin_left = 1013.0
+margin_top = 29.0
+margin_right = 1321.0
+margin_bottom = 100.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "Kills: 0"
+
+[node name="Triggers" type="Node" parent="."]
+
+[node name="Area2D" type="Area2D" parent="Triggers"]
+collision_layer = 17
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Triggers/Area2D"]
+position = Vector2( 3200, 360 )
+shape = SubResource( 4 )
+
+[connection signal="area_entered" from="Triggers/Area2D" to="." method="_on_Area2D_area_entered"]
